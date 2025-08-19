@@ -1,0 +1,286 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(STUDENT)
+  grade         String?   // For students
+  institution   String?   // School/University name
+  
+  // Gamification
+  totalPoints   Int       @default(0)
+  level         Int       @default(1)
+  
+  // Relations
+  accounts         Account[]
+  sessions         Session[]
+  badges          UserBadge[]
+  subjectProgress SubjectProgress[]
+  gameProgress    GameProgress[]
+  createdCourses  Course[] @relation("CourseCreator")
+  enrollments     Enrollment[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+  TUTOR
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Badge {
+  id          String @id @default(cuid())
+  name        String @unique
+  description String
+  icon        String
+  color       String
+  category    BadgeCategory
+  
+  // Requirements
+  pointsRequired Int?
+  levelRequired  Int?
+  
+  users UserBadge[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum BadgeCategory {
+  ACHIEVEMENT
+  MILESTONE
+  SUBJECT_MASTERY
+  STREAK
+  PARTICIPATION
+}
+
+model UserBadge {
+  id       String @id @default(cuid())
+  userId   String
+  badgeId  String
+  
+  user     User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge    Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  
+  earnedAt DateTime @default(now())
+  
+  @@unique([userId, badgeId])
+}
+
+model Subject {
+  id          String @id @default(cuid())
+  name        String @unique
+  slug        String @unique
+  description String
+  icon        String
+  color       String
+  category    SubjectCategory
+  
+  topics      Topic[]
+  courses     Course[]
+  tools       Tool[]
+  games       Game[]
+  progress    SubjectProgress[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum SubjectCategory {
+  MATHEMATICS
+  PHYSICS
+  CHEMISTRY
+  BIOLOGY
+  COMPUTER_SCIENCE
+  ENGINEERING
+  EARTH_SCIENCES
+  ASTRONOMY
+}
+
+model Topic {
+  id          String @id @default(cuid())
+  title       String
+  slug        String
+  description String
+  content     Json   // Rich content structure
+  difficulty  Difficulty
+  order       Int    @default(0)
+  
+  subject     Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId   String
+  
+  prerequisites Topic[] @relation("TopicPrerequisites")
+  dependents    Topic[] @relation("TopicPrerequisites")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([subjectId, slug])
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+model Course {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  thumbnail   String?
+  
+  subject     Subject @relation(fields: [subjectId], references: [id])
+  subjectId   String
+  
+  creator     User @relation("CourseCreator", fields: [creatorId], references: [id])
+  creatorId   String
+  
+  enrollments Enrollment[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Enrollment {
+  id       String @id @default(cuid())
+  userId   String
+  courseId String
+  
+  user     User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  progress Float @default(0) // 0-100
+  
+  enrolledAt DateTime @default(now())
+  
+  @@unique([userId, courseId])
+}
+
+model SubjectProgress {
+  id        String @id @default(cuid())
+  userId    String
+  subjectId String
+  
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  
+  progress  Float @default(0) // 0-100
+  points    Int   @default(0)
+  
+  lastStudied DateTime @default(now())
+  
+  @@unique([userId, subjectId])
+}
+
+model Tool {
+  id          String @id @default(cuid())
+  name        String
+  slug        String @unique
+  description String
+  type        ToolType
+  
+  subject     Subject @relation(fields: [subjectId], references: [id])
+  subjectId   String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ToolType {
+  CALCULATOR
+  GRAPHING
+  SIMULATION
+  CONVERTER
+  REFERENCE
+}
+
+model Game {
+  id          String @id @default(cuid())
+  name        String
+  slug        String @unique
+  description String
+  type        GameType
+  
+  subject     Subject @relation(fields: [subjectId], references: [id])
+  subjectId   String
+  
+  progress    GameProgress[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum GameType {
+  QUIZ
+  PUZZLE
+  SIMULATION
+  ADVENTURE
+  PRACTICE
+}
+
+model GameProgress {
+  id       String @id @default(cuid())
+  userId   String
+  gameId   String
+  
+  user     User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game     Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  
+  score    Int @default(0)
+  level    Int @default(1)
+  progress Float @default(0) // 0-100
+  
+  lastPlayed DateTime @default(now())
+  
+  @@unique([userId, gameId])
+}

@@ -1,64 +1,50 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { 
-  Calculator, 
-  Gamepad2, 
-  Users, 
   BookOpen, 
+  GraduationCap, 
   Trophy, 
-  Zap,
-  Brain,
-  Target
+  Users,
+  Calculator,
+  Smartphone
 } from 'lucide-react'
 
 export function Features() {
   const features = [
     {
-      icon: Calculator,
-      title: 'Advanced Calculator',
-      description: 'Full-featured scientific calculator with history, memory functions, and step-by-step solutions.',
-      color: 'text-blue-600'
-    },
-    {
-      icon: Gamepad2,
-      title: 'Gamified Learning',
-      description: 'Earn points, unlock achievements, and compete on leaderboards while mastering STEM concepts.',
-      color: 'text-green-600'
-    },
-    {
-      icon: Users,
-      title: 'Role-Based Access',
-      description: 'Tailored experiences for students, teachers, tutors, and administrators with specialized tools.',
-      color: 'text-purple-600'
-    },
-    {
       icon: BookOpen,
-      title: 'Interactive Subjects',
-      description: 'Explore Math, Physics, Chemistry, and Biology with hands-on experiments and simulations.',
-      color: 'text-orange-600'
+      title: 'Interactive Learning',
+      description: 'Hands-on experiments, simulations, and multimedia content that brings STEM concepts to life.',
+      color: 'text-brand-blue'
     },
     {
-      icon: Brain,
-      title: 'Adaptive Learning',
-      description: 'AI-powered personalized learning paths that adapt to your pace and learning style.',
-      color: 'text-pink-600'
-    },
-    {
-      icon: Target,
-      title: 'Progress Tracking',
-      description: 'Detailed analytics and progress reports to track your learning journey and identify areas for improvement.',
-      color: 'text-indigo-600'
+      icon: GraduationCap,
+      title: 'Rich Curriculum',
+      description: 'Comprehensive curriculum covering all STEM subjects from elementary to university level.',
+      color: 'text-brand-teal'
     },
     {
       icon: Trophy,
-      title: 'Achievements System',
-      description: 'Unlock badges and certificates as you complete learning milestones and demonstrate mastery.',
-      color: 'text-yellow-600'
+      title: 'Progress & Achievements',
+      description: 'Track your learning journey with detailed analytics and unlock achievements as you master concepts.',
+      color: 'text-brand-yellow'
     },
     {
-      icon: Zap,
-      title: 'Real-time Collaboration',
-      description: 'Work together with classmates and get instant help from tutors in our collaborative environment.',
-      color: 'text-red-600'
+      icon: Users,
+      title: 'Teacher Tools',
+      description: 'Specialized tools for educators including lesson plans, progress monitoring, and classroom management.',
+      color: 'text-brand-blue'
+    },
+    {
+      icon: Calculator,
+      title: 'Real-time Calculators',
+      description: 'Advanced scientific calculators with step-by-step solutions and graphing capabilities.',
+      color: 'text-brand-teal'
+    },
+    {
+      icon: Smartphone,
+      title: 'Accessible & Responsive',
+      description: 'Learn anywhere, anytime with our fully responsive platform optimized for all devices.',
+      color: 'text-brand-yellow'
     }
   ]
 
@@ -75,7 +61,7 @@ export function Features() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => (
             <Card key={feature.title} className="hover:shadow-lg transition-shadow">
               <CardHeader>

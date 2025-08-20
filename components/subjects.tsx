@@ -16,7 +16,7 @@ export function Subjects() {
       name: 'Mathematics',
       description: 'Explore algebra, calculus, geometry, statistics, and more with interactive problem solving.',
       icon: Calculator,
-      color: 'from-blue-500 to-cyan-500',
+      color: 'from-brand-blue to-brand-teal',
       topics: ['Algebra', 'Calculus', 'Geometry', 'Statistics', 'Trigonometry'],
       href: '/subjects/mathematics'
     },
@@ -25,7 +25,7 @@ export function Subjects() {
       name: 'Physics',
       description: 'Discover the fundamental laws of nature through experiments and simulations.',
       icon: Zap,
-      color: 'from-purple-500 to-pink-500',
+      color: 'from-brand-teal to-brand-yellow',
       topics: ['Mechanics', 'Thermodynamics', 'Electromagnetism', 'Optics', 'Quantum Physics'],
       href: '/subjects/physics'
     },
@@ -34,7 +34,7 @@ export function Subjects() {
       name: 'Chemistry',
       description: 'Learn about atoms, molecules, reactions, and the periodic table in our virtual lab.',
       icon: Atom,
-      color: 'from-green-500 to-emerald-500',
+      color: 'from-brand-yellow to-brand-blue',
       topics: ['Organic Chemistry', 'Inorganic Chemistry', 'Physical Chemistry', 'Biochemistry', 'Analytical Chemistry'],
       href: '/subjects/chemistry'
     },
@@ -43,7 +43,7 @@ export function Subjects() {
       name: 'Biology',
       description: 'Explore life sciences from cells to ecosystems with 3D models and interactive content.',
       icon: Dna,
-      color: 'from-orange-500 to-red-500',
+      color: 'from-brand-blue to-brand-teal',
       topics: ['Cell Biology', 'Genetics', 'Evolution', 'Ecology', 'Human Anatomy'],
       href: '/subjects/biology'
     }

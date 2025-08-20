@@ -3,10 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { 
-  BookOpen, 
-  Calculator, 
-  Users, 
   Menu, 
   X,
   GraduationCap
@@ -16,10 +14,12 @@ export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navItems = [
-    { name: 'Subjects', href: '/subjects', icon: BookOpen },
-    { name: 'Calculator', href: '/tools/calculators', icon: Calculator },
-    { name: 'Dashboard', href: '/dashboard', icon: GraduationCap },
-    { name: 'Community', href: '/community', icon: Users },
+    { name: 'Home', href: '/' },
+    { name: 'Subjects', href: '/subjects' },
+    { name: 'About', href: '/about' },
+    { name: 'Curriculum', href: '/curriculum' },
+    { name: 'Labs', href: '/labs' },
+    { name: 'Tools', href: '/tools/calculators/scientific' },
   ]
 
   return (
@@ -37,7 +37,7 @@ export function Navigation() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
+                className="transition-colors hover:text-secondary text-foreground/80 hover:text-secondary focus:text-primary"
               >
                 {item.name}
               </Link>
@@ -78,25 +78,47 @@ export function Navigation() {
       </div>
 
       {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden">
-          <div className="border-t px-4 pt-4 pb-4">
-            <nav className="flex flex-col space-y-3">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="flex items-center space-x-2 text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-            </nav>
-          </div>
-        </div>
-      )}
+      <Sheet isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle className="flex items-center space-x-2">
+              <GraduationCap className="h-6 w-6" />
+              <span>STEM Platform</span>
+            </SheetTitle>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </SheetHeader>
+          
+          <nav className="flex flex-col space-y-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-base font-medium transition-colors hover:text-secondary text-foreground/80 focus:text-primary py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+            
+            <div className="pt-4 mt-4 border-t">
+              <div className="flex flex-col space-y-3">
+                <Button variant="ghost" asChild className="justify-start">
+                  <Link href="/login" onClick={() => setIsMenuOpen(false)}>Sign In</Link>
+                </Button>
+                <Button asChild className="justify-start">
+                  <Link href="/register" onClick={() => setIsMenuOpen(false)}>Get Started</Link>
+                </Button>
+              </div>
+            </div>
+          </nav>
+        </SheetContent>
+      </Sheet>
     </nav>
   )
 }

@@ -1,34 +1,52 @@
 @import "tailwindcss";
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  --primary: 240 5.9% 10%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
-  --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 5.9% 10%;
+  /* Brand Colors */
+  --brand-blue: 224 64% 33%;      /* Deep Science Blue #1E3A8A */
+  --brand-teal: 189 94% 43%;      /* Vibrant Turquoise #06B6D4 */
+  --brand-yellow: 48 96% 53%;     /* Bright Discovery Yellow #FACC15 */
+  --brand-gray: 220 14% 96%;      /* Soft Science Gray #F3F4F6 */
+  --brand-charcoal: 221 39% 11%;  /* Charcoal Text #111827 */
+  --brand-white: 0 0% 100%;       /* White #FFFFFF */
+
+  /* Light Mode - shadcn tokens mapped to brand colors */
+  --background: var(--brand-gray);
+  --foreground: var(--brand-charcoal);
+  --card: var(--brand-white);
+  --card-foreground: var(--brand-charcoal);
+  --popover: var(--brand-white);
+  --popover-foreground: var(--brand-charcoal);
+  --primary: var(--brand-blue);
+  --primary-foreground: var(--brand-white);
+  --secondary: var(--brand-teal);
+  --secondary-foreground: var(--brand-white);
+  --muted: 220 14% 92%;
+  --muted-foreground: 221 39% 45%;
+  --accent: var(--brand-yellow);
+  --accent-foreground: var(--brand-charcoal);
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 240 10% 3.9%;
-  --chart-1: 12 76% 61%;
-  --chart-2: 173 58% 39%;
-  --chart-3: 197 37% 24%;
-  --chart-4: 43 74% 66%;
-  --chart-5: 27 87% 67%;
+  --destructive-foreground: var(--brand-white);
+  --border: 220 14% 85%;
+  --input: 220 14% 90%;
+  --ring: var(--brand-blue);
+  --chart-1: var(--brand-blue);
+  --chart-2: var(--brand-teal);
+  --chart-3: var(--brand-yellow);
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
   --radius: 0.5rem;
 }
 
 @theme inline {
+  /* Brand Colors for Tailwind */
+  --color-brand-blue: hsl(var(--brand-blue));
+  --color-brand-teal: hsl(var(--brand-teal));
+  --color-brand-yellow: hsl(var(--brand-yellow));
+  --color-brand-gray: hsl(var(--brand-gray));
+  --color-brand-charcoal: hsl(var(--brand-charcoal));
+  --color-brand-white: hsl(var(--brand-white));
+  
+  /* Standard shadcn theme colors */
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -57,28 +75,29 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    /* Dark Mode - shadcn tokens mapped to brand colors */
+    --background: var(--brand-charcoal);
+    --foreground: var(--brand-gray);
+    --card: var(--brand-charcoal);
+    --card-foreground: var(--brand-gray);
+    --popover: var(--brand-charcoal);
+    --popover-foreground: var(--brand-gray);
+    --primary: var(--brand-blue);
+    --primary-foreground: var(--brand-white);
+    --secondary: var(--brand-teal);
+    --secondary-foreground: var(--brand-white);
+    --muted: 221 39% 18%;
+    --muted-foreground: 220 14% 70%;
+    --accent: var(--brand-yellow);
+    --accent-foreground: var(--brand-charcoal);
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
+    --destructive-foreground: var(--brand-white);
+    --border: 221 39% 18%;
+    --input: 221 39% 18%;
+    --ring: var(--brand-teal);
+    --chart-1: var(--brand-blue);
+    --chart-2: var(--brand-teal);
+    --chart-3: var(--brand-yellow);
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }

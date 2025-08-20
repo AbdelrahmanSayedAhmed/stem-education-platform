@@ -11,23 +11,66 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  name        String?
-  password    String?
-  role        UserRole @default(STUDENT)
-  avatar      String?
-  points      Int      @default(0)
-  level       Int      @default(1)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(STUDENT)
+  points        Int       @default(0)
+  level         Int       @default(1)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  // Relations
-  progress    Progress[]
-  achievements UserAchievement[]
+  // NextAuth relations
+  accounts      Account[]
+  sessions      Session[]
+
+  // App relations
+  progress          Progress[]
+  achievements      UserAchievement[]
   calculatorHistory CalculatorHistory[]
   
   @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
 }
 
 model Subject {
@@ -41,6 +84,7 @@ model Subject {
   
   // Relations
   topics      Topic[]
+  lessons     Lesson[]
   progress    Progress[]
   
   @@map("subjects")
@@ -59,9 +103,28 @@ model Topic {
   subject     Subject @relation(fields: [subjectId], references: [id])
   
   // Relations
+  lessons     Lesson[]
   progress    Progress[]
   
   @@map("topics")
+}
+
+model Lesson {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  content     String
+  difficulty  Difficulty
+  order       Int    @default(0)
+  published   Boolean @default(false)
+  
+  // Foreign keys
+  subjectId   String
+  subject     Subject @relation(fields: [subjectId], references: [id])
+  topicId     String
+  topic       Topic @relation(fields: [topicId], references: [id])
+  
+  @@map("lessons")
 }
 
 model Progress {

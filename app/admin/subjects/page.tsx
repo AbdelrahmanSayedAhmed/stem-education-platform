@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Navigation } from '@/components/navigation'
@@ -6,14 +9,68 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Plus, ArrowLeft, BookOpen } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: 'Manage Subjects | Admin Dashboard',
-  description: 'Create and manage learning subjects',
+interface Subject {
+  id: string
+  name: string
+  description: string
+  icon: string
+  color: string
+  grade: string
+  order: number
+  _count: {
+    topics: number
+    lessons: number
+  }
 }
 
 export default function AdminSubjectsPage() {
-  // This would normally fetch subjects from the database
-  const subjects = []
+  const [subjects, setSubjects] = useState<Subject[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetchSubjects()
+  }, [])
+
+  const fetchSubjects = async () => {
+    try {
+      const response = await fetch('/api/admin/subjects')
+      if (!response.ok) {
+        throw new Error('Failed to fetch subjects')
+      }
+      const data = await response.json()
+      setSubjects(data)
+    } catch (error) {
+      console.error('Error fetching subjects:', error)
+      setError('Failed to load subjects')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">Loading...</div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center text-red-600">{error}</div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen">
@@ -65,7 +122,7 @@ export default function AdminSubjectsPage() {
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {subjects.map((subject: any) => (
+            {subjects.map((subject) => (
               <Card key={subject.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <CardTitle className="flex items-center">
@@ -74,11 +131,19 @@ export default function AdminSubjectsPage() {
                         {subject.name.charAt(0)}
                       </span>
                     </div>
-                    {subject.name}
+                    <div>
+                      <div>{subject.name}</div>
+                      <div className="text-sm text-muted-foreground font-normal">
+                        {subject.grade}
+                      </div>
+                    </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-4">{subject.description}</p>
+                  <div className="text-sm text-muted-foreground mb-4">
+                    {subject._count.topics} topics • {subject._count.lessons} lessons
+                  </div>
                   <div className="flex space-x-2">
                     <Button size="sm" asChild>
                       <Link href={`/admin/subjects/${subject.id}`}>

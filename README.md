@@ -120,13 +120,71 @@ The platform is optimized for zero-config Vercel deployment.
 # Database
 DATABASE_URL="file:./dev.db"
 
-# NextAuth (for authentication)
+# NextAuth Configuration
 NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-here"
-NEXTAUTH_URL_INTERNAL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-key-here-make-it-long-and-random"
+
+# OAuth Providers
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+GITHUB_ID="your-github-client-id" 
+GITHUB_SECRET="your-github-client-secret"
+
+# Email Configuration (for magic links)
+EMAIL_SERVER="smtp://user:password@smtp.example.com:587"
+EMAIL_FROM="noreply@yourdomain.com"
+
+# Admin Configuration
+ALLOWED_ADMINS="admin@example.com,admin2@example.com"
 ```
 
 For production, update URLs accordingly.
+
+## 🔐 Authentication Setup
+
+The platform uses NextAuth.js for authentication with multiple providers:
+
+### 1. Copy Environment Variables
+```bash
+cp .env.example .env.local
+```
+
+### 2. Configure OAuth Providers
+
+**Google OAuth:**
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing
+3. Enable Google+ API
+4. Create OAuth 2.0 credentials
+5. Add your domain to authorized origins
+6. Add `http://localhost:3000/api/auth/callback/google` to authorized redirect URIs
+
+**GitHub OAuth:**
+1. Go to GitHub Settings → Developer settings → OAuth Apps
+2. Create a new OAuth App
+3. Set Authorization callback URL to `http://localhost:3000/api/auth/callback/github`
+
+**Email Magic Links:**
+Configure your SMTP server details in `EMAIL_SERVER` and `EMAIL_FROM`
+
+### 3. Database Setup
+```bash
+# Generate Prisma client
+npm run db:generate
+
+# Push schema to database
+npm run db:push
+```
+
+### 4. Admin Access
+Add admin email addresses to `ALLOWED_ADMINS` environment variable (comma-separated). These users will automatically get admin role on first sign-in.
+
+### 5. Start Development
+```bash
+npm run dev
+```
+
+Visit `http://localhost:3000` and sign in with any configured provider. Admin users can access `/admin` to manage content.
 
 ## 🎯 Key Pages
 

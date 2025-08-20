@@ -14,7 +14,7 @@ export function Hero() {
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
               Master STEM with{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-brand-blue to-brand-teal bg-clip-text text-transparent">
                 Interactive Learning
               </span>
             </h1>
@@ -26,31 +26,31 @@ export function Hero() {
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Button size="lg" className="text-lg px-8" asChild>
-              <Link href="/register">
-                Start Learning Free
+              <Link href="/subjects">
+                Explore Subjects
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8" asChild>
-              <Link href="/subjects">
-                Explore Subjects
+            <Button size="lg" variant="secondary" className="text-lg px-8" asChild>
+              <Link href="/tools/calculators/scientific">
+                Try Calculator
               </Link>
             </Button>
           </div>
 
           <div className="grid grid-cols-3 gap-8 pt-8">
             <div className="flex flex-col items-center space-y-2">
-              <Users className="h-8 w-8 text-blue-600" />
+              <Users className="h-8 w-8 text-brand-blue" />
               <div className="text-2xl font-bold">10,000+</div>
               <div className="text-sm text-muted-foreground">Active Students</div>
             </div>
             <div className="flex flex-col items-center space-y-2">
-              <Trophy className="h-8 w-8 text-green-600" />
+              <Trophy className="h-8 w-8 text-brand-teal" />
               <div className="text-2xl font-bold">500+</div>
               <div className="text-sm text-muted-foreground">Achievements</div>
             </div>
             <div className="flex flex-col items-center space-y-2">
-              <Sparkles className="h-8 w-8 text-purple-600" />
+              <Sparkles className="h-8 w-8 text-brand-yellow" />
               <div className="text-2xl font-bold">1000+</div>
               <div className="text-sm text-muted-foreground">Interactive Lessons</div>
             </div>
@@ -59,7 +59,7 @@ export function Hero() {
       </div>
       
       {/* Background gradient */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-brand-blue/5 to-brand-teal/5 dark:from-brand-blue/10 dark:to-brand-teal/10" />
     </section>
   )
 }

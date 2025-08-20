@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { UserMenu } from '@/components/auth/UserMenu'
 import { 
   Menu, 
   X,
@@ -12,6 +14,7 @@ import {
 
 export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { data: session } = useSession()
 
   const navItems = [
     { name: 'Home', href: '/' },
@@ -51,7 +54,10 @@ export function Navigation() {
             <GraduationCap className="h-6 w-6" />
             <span className="font-bold">STEM Platform</span>
           </Link>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center space-x-2">
+            <div className="hidden sm:block">
+              <UserMenu />
+            </div>
             <Button
               variant="ghost"
               size="sm"
@@ -66,14 +72,9 @@ export function Navigation() {
           <div className="w-full flex-1 md:w-auto md:flex-none">
             {/* Search functionality can be added here */}
           </div>
-          <nav className="flex items-center">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/login">Sign In</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/register">Get Started</Link>
-            </Button>
-          </nav>
+          <div className="hidden md:block">
+            <UserMenu />
+          </div>
         </div>
       </div>
 
@@ -107,13 +108,8 @@ export function Navigation() {
             ))}
             
             <div className="pt-4 mt-4 border-t">
-              <div className="flex flex-col space-y-3">
-                <Button variant="ghost" asChild className="justify-start">
-                  <Link href="/login" onClick={() => setIsMenuOpen(false)}>Sign In</Link>
-                </Button>
-                <Button asChild className="justify-start">
-                  <Link href="/register" onClick={() => setIsMenuOpen(false)}>Get Started</Link>
-                </Button>
+              <div className="sm:hidden">
+                <UserMenu />
               </div>
             </div>
           </nav>

@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  password    String?
+  role        UserRole @default(STUDENT)
+  avatar      String?
+  points      Int      @default(0)
+  level       Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  progress    Progress[]
+  achievements UserAchievement[]
+  calculatorHistory CalculatorHistory[]
+  
+  @@map("users")
+}
+
+model Subject {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  color       String
+  grade       String
+  order       Int    @default(0)
+  
+  // Relations
+  topics      Topic[]
+  progress    Progress[]
+  
+  @@map("subjects")
+}
+
+model Topic {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  content     String
+  difficulty  Difficulty
+  order       Int    @default(0)
+  
+  // Foreign keys
+  subjectId   String
+  subject     Subject @relation(fields: [subjectId], references: [id])
+  
+  // Relations
+  progress    Progress[]
+  
+  @@map("topics")
+}
+
+model Progress {
+  id          String @id @default(cuid())
+  completed   Boolean @default(false)
+  score       Float?
+  timeSpent   Int     @default(0) // in minutes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Foreign keys
+  userId      String
+  user        User    @relation(fields: [userId], references: [id])
+  subjectId   String
+  subject     Subject @relation(fields: [subjectId], references: [id])
+  topicId     String?
+  topic       Topic?  @relation(fields: [topicId], references: [id])
+  
+  @@unique([userId, subjectId, topicId])
+  @@map("progress")
+}
+
+model Achievement {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  points      Int
+  category    AchievementCategory
+  
+  // Relations
+  users       UserAchievement[]
+  
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String @id @default(cuid())
+  unlockedAt    DateTime @default(now())
+  
+  // Foreign keys
+  userId        String
+  user          User @relation(fields: [userId], references: [id])
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model CalculatorHistory {
+  id          String @id @default(cuid())
+  expression  String
+  result      String
+  createdAt   DateTime @default(now())
+  
+  // Foreign keys
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
+  
+  @@map("calculator_history")
+}
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+  TUTOR
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum AchievementCategory {
+  LEARNING
+  CALCULATION
+  PROGRESS
+  SPECIAL
+}
